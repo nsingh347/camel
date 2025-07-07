@@ -1,7 +1,8 @@
 ---
+
 title: "Tools"
 icon: screwdriver-wrench
----
+------------------------
 
 For more detailed usage information, please refer to our cookbook: [Tools Cookbook](../cookbooks/advanced_features/agents_with_tools.ipynb)
 
@@ -19,11 +20,12 @@ For more detailed usage information, please refer to our cookbook: [Tools Cookbo
 
 <Card title="Install Toolkits" icon="terminal">
 To unlock advanced capabilities for your agents, install CAMEL's extra tools package:
+
 <CodeBlock language="sh" title="Install with pip">
 pip install 'camel-ai[tools]'
 </CodeBlock>
-A tool in CAMEL is just a <b>FunctionTool</b>—an interface any agent can call to run custom logic or access APIs.
-</Card>
+
+A tool in CAMEL is just a <b>FunctionTool</b>—an interface any agent can call to run custom logic or access APIs. </Card>
 
 <Card title="Define a Custom Tool" icon="toolbox">
 You can easily create your own tools for any use case. Just write a Python function and wrap it using <b>FunctionTool</b>:
@@ -32,28 +34,29 @@ You can easily create your own tools for any use case. Just write a Python funct
 from camel.toolkits import FunctionTool
 
 def add(a: int, b: int) -> int:
-    """Adds two numbers."""
-    return a + b
+"""Adds two numbers."""
+return a + b
 
-add_tool = FunctionTool(add)
-</CodeBlock>
+add\_tool = FunctionTool(add) </CodeBlock>
 
-Inspect your tool’s properties—such as its name, description, and OpenAI-compatible schema—using built-in methods:
+Inspect your tool’s properties using built-in methods:
+
 <CodeGroup>
 ```python tool_properties.py
-print(add_tool.get_function_name())          # add
-print(add_tool.get_function_description())   # Adds two numbers.
-print(add_tool.get_openai_function_schema()) # OpenAI Functions schema
-print(add_tool.get_openai_tool_schema())     # OpenAI Tool format
+print(add_tool.get_function_name())
+print(add_tool.get_function_description())
+print(add_tool.get_openai_function_schema())
+print(add_tool.get_openai_tool_schema())
 ```
 ```text output.txt
 add
 Adds two numbers.
 
-{'name': 'add', 'description': 'Adds two numbers.', 'parameters': {'properties': {'a': {'type': 'integer', 'description': 'The first number to be added.'}, 'b': {'type': 'integer', 'description': 'The second number to be added.'}}, 'required': ['a', 'b'], 'type': 'object'}}
+{'name': 'add', 'description': 'Adds two numbers.', 'parameters': {'properties': {'a': {'type': 'integer', 'description': 'The first number to be added.'}, 'b': {'type': 'integer', 'description': 'The second number to be added.'}}, 'required': \['a', 'b'], 'type': 'object'}}
 
-{'type': 'function', 'function': {'name': 'add', 'description': 'Adds two numbers.', 'parameters': {'properties': {'a': {'type': 'integer', 'description': 'The first number to be added.'}, 'b': {'type': 'integer', 'description': 'The second number to be added.'}}, 'required': ['a', 'b'], 'type': 'object'}}}
-```
+{'type': 'function', 'function': {'name': 'add', 'description': 'Adds two numbers.', 'parameters': {'properties': {'a': {'type': 'integer', 'description': 'The first number to be added.'}, 'b': {'type': 'integer', 'description': 'The second number to be added.'}}, 'required': \['a', 'b'], 'type': 'object'}}}
+
+````
 </CodeGroup>
 </Card>
 
@@ -62,11 +65,13 @@ Toolkits group related tools for specialized tasks—search, math, or automation
 
 <CodeBlock language="python" title="toolkit_usage.py">
 from camel.toolkits import SearchToolkit
+
 toolkit = SearchToolkit()
 tools = toolkit.get_tools()
 </CodeBlock>
 
 You can also wrap toolkit methods as individual FunctionTools:
+
 <CodeBlock language="python" title="custom_tools.py">
 from camel.toolkits import FunctionTool, SearchToolkit
 
@@ -91,74 +96,73 @@ response = tool_agent.step("A query related to the tool you added")
 
 ## Built-in Toolkits
 
-CAMEL provides a variety of built-in toolkits that you can use right away. Here's a comprehensive list of available toolkits:
+CAMEL provides a variety of built-in toolkits that you can use right away:
 
 | Toolkit | Description |
 |---------|-------------|
-| ArxivToolkit | A toolkit for interacting with the arXiv API to search and download academic papers. |
-| AskNewsToolkit | A toolkit for fetching news, stories, and other content based on user queries using the AskNews API. |
-| AudioAnalysisToolkit | A toolkit for audio processing and analysis, including transcription and question answering about audio content. |
-| BrowserToolkit | A toolkit for browsing the web and interacting with web pages, including browser simulation and content extraction. |
-| CodeExecutionToolkit | A toolkit for code execution which can run code in various sandboxes including internal Python, Jupyter, Docker, subprocess, or e2b. |
-| DalleToolkit | A toolkit for image generation using OpenAI's DALL-E model. |
-| DappierToolkit | A toolkit for searching real-time data and fetching AI recommendations across key verticals like News, Finance, Stock Market, Sports, Weather and more using the Dappier API. |
-| DataCommonsToolkit | A toolkit for querying and retrieving data from the Data Commons knowledge graph, including SPARQL queries, statistical time series data, and property analysis. |
-| ExcelToolkit | A toolkit for extracting and processing content from Excel files, including conversion to markdown tables. |
-| FunctionTool | A base toolkit for creating function-based tools that OpenAI chat models can call, with support for schema parsing and synthesis. |
-| FileWriteTool | A toolkit for creating, writing, and modifying text in files. |
-| GitHubToolkit | A toolkit for interacting with GitHub repositories, including retrieving issues and creating pull requests. |
-| GoogleCalendarToolkit | A toolkit for creating events, retrieving events, updating events, and deleting events from a Google Calendar |
-| GoogleMapsToolkit | A toolkit for accessing Google Maps services, including address validation, elevation data, and timezone information. |
-| GoogleScholarToolkit | A toolkit for retrieving information about authors and their publications from Google Scholar. |
-| HumanToolkit | A toolkit for facilitating human-in-the-loop interactions and feedback in AI systems. |
-| ImageAnalysisToolkit | A toolkit for comprehensive image analysis and understanding using vision-capable language models. |
-| JinaRerankerToolkit | A toolkit for reranking documents (text or images) based on their relevance to a given query using the Jina Reranker model. |
-| LinkedInToolkit | A toolkit for LinkedIn operations including creating posts, deleting posts, and retrieving user profile information. |
-| MathToolkit | A toolkit for performing basic mathematical operations such as addition, subtraction, and multiplication. |
-| MCPToolkit | A toolkit for interacting with external tools using the Model Context Protocol (MCP).  |
-| MemoryToolkit | A toolkit for saving, loading, and clearing a ChatAgent's memory.  |
-| MeshyToolkit | A toolkit for working with 3D mesh data and operations. |
-| MinerUToolkit | A toolkit for extracting and processing document content using the MinerU API, with support for OCR, formula recognition, and table detection. |
-| NetworkXToolkit | A toolkit for graph operations and analysis using the NetworkX library. |
-| NotionToolkit | A toolkit for retrieving information from Notion pages and workspaces using the Notion API. |
-| OpenAPIToolkit | A toolkit for working with OpenAPI specifications and REST APIs. |
-| OpenBBToolkit | A toolkit for accessing and analyzing financial market data through the OpenBB Platform, including stocks, ETFs, cryptocurrencies, and economic indicators. |
-| PPTXToolkit | A toolkit for creating and manipulating PowerPoint (PPTX) files, including adding slides, text, and images. |
-| PubMedToolkit | A toolkit for interacting with PubMed's E-utilities API to access MEDLINE data. |
-| RedditToolkit | A toolkit for Reddit operations including collecting top posts, performing sentiment analysis on comments, and tracking keyword discussions. |
-| RetrievalToolkit | A toolkit for retrieving information from local vector storage systems based on specified queries. |
-| SearchToolkit | A toolkit for performing web searches using various search engines like Google, DuckDuckGo, Wikipedia, Bing, BaiDu and Wolfram Alpha. |
-| SemanticScholarToolkit | A toolkit for interacting with the Semantic Scholar API to fetch paper and author data from academic publications. |
-| SlackToolkit | A toolkit for Slack operations including creating channels, joining channels, and managing channel membership. |
-| StripeToolkit | A toolkit for processing payments and managing financial transactions via Stripe. |
-| SymPyToolkit | A toolkit for performing symbolic computations using SymPy, including algebraic manipulation, calculus, and linear algebra. |
-| TerminalToolkit | A toolkit for terminal operations such as searching for files by name or content, executing shell commands, and managing terminal sessions across multiple operating systems. |
-| TwitterToolkit | A toolkit for Twitter operations including creating tweets, deleting tweets, and retrieving user profile information. |
-| VideoAnalysisToolkit | A toolkit for analyzing video content with vision-language models, including frame extraction and question answering about video content. |
-| VideoDownloaderToolkit | A toolkit for downloading videos and optionally splitting them into chunks, with support for various video services. |
-| WeatherToolkit | A toolkit for fetching weather data for cities using the OpenWeatherMap API. |
-| WhatsAppToolkit | A toolkit for interacting with the WhatsApp Business API, including sending messages, managing message templates, and accessing business profile information. |
-| ZapierToolkit | A toolkit for interacting with Zapier's NLA API to execute actions through natural language commands and automate workflows. |
-| KlavisToolkit | A toolkit for interacting with Kavis AI's API to create remote hosted production-ready MCP servers. |
+| ArxivToolkit | Interact with the arXiv API to search and download academic papers. |
+| AskNewsToolkit | Fetch news and stories from the AskNews API. |
+| AudioAnalysisToolkit | Analyze and transcribe audio content. |
+| BrowserToolkit | Browse and extract data from web pages. |
+| CodeExecutionToolkit | Execute code in safe environments (Python, Jupyter, Docker, etc.). |
+| DalleToolkit | Generate images using OpenAI's DALL-E. |
+| DappierToolkit | Fetch real-time data and AI-powered recommendations. |
+| DataCommonsToolkit | Query the Data Commons graph for stats and trends. |
+| ExcelToolkit | Extract and process Excel files. |
+| FileWriteTool | Create or edit text files. |
+| FunctionTool | Base for wrapping any Python function as a tool. |
+| GitHubToolkit | Access GitHub APIs to fetch issues, PRs, etc. |
+| GoogleCalendarToolkit | Create, edit, and delete calendar events. |
+| GoogleMapsToolkit | Access Google Maps data. |
+| GoogleScholarToolkit | Retrieve publication data from Google Scholar. |
+| HumanToolkit | Get user feedback for LLM decisions. |
+| ImageAnalysisToolkit | Analyze images with vision-language models. |
+| JinaRerankerToolkit | Re-rank documents/images by query relevance. |
+| KlavisToolkit | Manage hosted MCP servers on Klavis AI. |
+| LinkedInToolkit | Interact with LinkedIn (post, fetch profile). |
+| MathToolkit | Perform basic arithmetic calculations. |
+| MCPToolkit | Connect to external tools using the MCP protocol. |
+| MemoryToolkit | Save and recall agent memory. |
+| MeshyToolkit | Perform operations on 3D mesh data. |
+| MinerUToolkit | OCR and document analysis using MinerU API. |
+| NetworkXToolkit | Work with graph structures using NetworkX. |
+| NotionToolkit | Query Notion workspaces and pages. |
+| OpenAPIToolkit | Work with OpenAPI/Swagger specs. |
+| OpenBBToolkit | Get financial data and market analytics. |
+| PPTXToolkit | Create and manipulate PowerPoint slides. |
+| PubMedToolkit | Retrieve data from the PubMed API. |
+| RedditToolkit | Scrape posts, comments, and analyze trends. |
+| RetrievalToolkit | Search a local vector DB. |
+| SearchToolkit | Perform web searches via Google, Wiki, etc. |
+| SemanticScholarToolkit | Fetch papers and author data via Semantic Scholar. |
+| SlackToolkit | Perform Slack operations via API. |
+| StripeToolkit | Manage payments and charges via Stripe. |
+| SymPyToolkit | Perform symbolic math (e.g., integrals, algebra). |
+| TerminalToolkit | Run shell commands and search local files. |
+| TwitterToolkit | Manage tweets and profiles via API. |
+| VideoAnalysisToolkit | Analyze videos with VLMs. |
+| VideoDownloaderToolkit | Download and chunk videos. |
+| WeatherToolkit | Fetch weather data via OpenWeatherMap API. |
+| WhatsAppToolkit | Send messages via WhatsApp Business API. |
+| ZapierToolkit | Trigger Zapier flows from natural language. |
 
 ## Using Toolkits as MCP Servers
 
 <Card title="MCP Servers in CAMEL" icon="server">
-CAMEL supports the <b>Model Context Protocol (MCP)</b>, letting you expose any toolkit as a standalone server. This enables distributed tool execution and seamless integration across multiple systems—clients can remotely discover and invoke tools via a consistent protocol.
+CAMEL supports the <b>Model Context Protocol (MCP)</b>, letting you expose any toolkit as a standalone server. This enables distributed tool execution and seamless integration across multiple systems.
 </Card>
 
 <Card title="What is MCP?" icon="anchor">
-MCP (Model Context Protocol) is a unified protocol for connecting LLMs with external tools and services. In CAMEL, you can turn any toolkit into an MCP server, making its tools available for remote calls—ideal for building distributed, modular, and language-agnostic AI workflows.
+MCP is a unified protocol for connecting LLMs with external tools. Any toolkit can be run as an MCP server, enabling remote invocation of tools across environments and languages.
 </Card>
 
 <Card title="Expose a Toolkit as an MCP Server" icon="rocket">
-Any CAMEL toolkit can run as an MCP server. Here’s how you can start an ArXiv toolkit server from a script:
+You can start any toolkit in server mode. Here’s how to run the ArxivToolkit as an MCP server:
 
 <CodeGroup>
 ```python
 import argparse
 import sys
-
 from camel.toolkits import ArxivToolkit
 
 if __name__ == "__main__":
@@ -167,31 +171,32 @@ if __name__ == "__main__":
         usage=f"python {sys.argv[0]} [--mode MODE] [--timeout TIMEOUT]",
     )
     parser.add_argument(
-        "--mode",
-        choices=["stdio", "sse", "streamable-http"],
-        default="stdio",
-        help="MCP server mode (default: 'stdio')",
+        "--mode", choices=["stdio", "sse", "streamable-http"],
+        default="stdio", help="MCP server mode (default: 'stdio')"
     )
     parser.add_argument(
-        "--timeout",
-        type=float,
-        default=None,
-        help="Timeout for the MCP server (default: None)",
+        "--timeout", type=float, default=None,
+        help="Timeout for the MCP server (default: None)"
     )
 
     args = parser.parse_args()
     toolkit = ArxivToolkit(timeout=args.timeout)
     toolkit.run_mcp_server(mode=args.mode)
-    ```
+````
+
 </CodeGroup>
-Supported modes:  
-- <b>stdio</b>: Standard input/output (default)  
-- <b>sse</b>: Server-Sent Events  
-- <b>streamable-http</b>: Streamable HTTP
-</Card>
+
+Supported modes:
+
+* <b>stdio</b>: Standard input/output (default)
+* <b>sse</b>: Server-Sent Events
+* <b>streamable-http</b>: Streamable HTTP
+
+  </Card>
 
 <Card title="MCP Server Configuration" icon="settings">
-Define how to launch your MCP servers with a config file:
+You can configure how toolkits are launched using a config file:
+
 <CodeGroup>
 ```json mcp_servers_config.json
 {
@@ -212,34 +217,38 @@ Define how to launch your MCP servers with a config file:
 </Card>
 
 <Card title="Connect to MCP Servers as a Client" icon="plug">
-From your client application, you can connect to MCP servers and use their tools remotely:
+Client apps can connect to and invoke tools from MCP servers:
+
 <CodeGroup>
 ```python mcp_client_example.py
 import asyncio
 from mcp.types import CallToolResult
 from camel.toolkits.mcp_toolkit import MCPToolkit, MCPClient
 
-async def run_example():
-    mcp_toolkit = MCPToolkit(config_path="path/to/mcp_servers_config.json")
-    await mcp_toolkit.connect()
+async def run\_example():
+mcp\_toolkit = MCPToolkit(config\_path="path/to/mcp\_servers\_config.json")
+await mcp\_toolkit.connect()
 
-    mcp_client: MCPClient = mcp_toolkit.servers[0]
+```
+mcp_client: MCPClient = mcp_toolkit.servers[0]
 
-    res = await mcp_client.list_mcp_tools()
-    if isinstance(res, str):
-        raise Exception(res)
-    tools = [tool.name for tool in res.tools]
-    print(f"Available tools: {tools}")
+res = await mcp_client.list_mcp_tools()
+if isinstance(res, str):
+    raise Exception(res)
+tools = [tool.name for tool in res.tools]
+print(f"Available tools: {tools}")
 
-    result: CallToolResult = await mcp_client.session.call_tool(
-        "tool_name", {"param1": "value1", "param2": "value2"}
-    )
-    print(result.content[0].text)
+result: CallToolResult = await mcp_client.session.call_tool(
+    "tool_name", {"param1": "value1", "param2": "value2"}
+)
+print(result.content[0].text)
 
-    await mcp_toolkit.disconnect()
+await mcp_toolkit.disconnect()
+```
 
-if __name__ == "__main__":
-    asyncio.run(run_example())
+if **name** == "**main**":
+asyncio.run(run\_example())
+
 ```
 </CodeGroup>
 </Card>
@@ -247,23 +256,25 @@ if __name__ == "__main__":
 <Card title="Benefits of MCP Servers" icon="zap">
 <ul>
   <li><b>Distributed Execution:</b> Run tools anywhere—across machines or containers.</li>
-  <li><b>Process Isolation:</b> Each toolkit runs in its own process for reliability and security.</li>
-  <li><b>Resource Management:</b> Allocate memory/CPU for heavy toolkits without impacting others.</li>
-  <li><b>Scalability:</b> Scale specific toolkits up or down as your workload changes.</li>
-  <li><b>Language Interoperability:</b> Implement MCP servers in any language that supports the protocol.</li>
+  <li><b>Process Isolation:</b> Each toolkit runs in its own process for stability and security.</li>
+  <li><b>Resource Management:</b> Allocate memory/CPU for heavier toolkits independently.</li>
+  <li><b>Scalability:</b> Easily scale individual toolkits.</li>
+  <li><b>Language Interoperability:</b> MCP works across Python, JS, and more.</li>
 </ul>
 </Card>
 
 <Card title="Best Practices for MCP Integration" icon="star">
 <ul>
-  <li><b>Timeouts:</b> Always set timeouts to prevent blocked operations.</li>
-  <li><b>Error Handling:</b> Implement robust error and exception handling in both server and client code.</li>
-  <li><b>Resource Cleanup:</b> Properly disconnect and free resources when finished.</li>
-  <li><b>Configuration:</b> Use config files or environment variables for flexible deployment.</li>
-  <li><b>Monitoring:</b> Add logging and health checks for production MCP deployments.</li>
+  <li><b>Set timeouts</b> to prevent tool hang-ups.</li>
+  <li><b>Handle errors</b> gracefully in both server and client logic.</li>
+  <li><b>Clean up resources</b> when finished using a toolkit.</li>
+  <li><b>Use environment variables</b> or config files for flexible deployment.</li>
+  <li><b>Log and monitor</b> toolkit performance in production.</li>
 </ul>
 </Card>
 
 <Card title="Conclusion" icon="trophy">
 Tools—especially when deployed as MCP servers—are the bridge between CAMEL agents and the real world. With this architecture, you can empower agents to automate, fetch, compute, and integrate with almost any external system.
 </Card>
+
+```
